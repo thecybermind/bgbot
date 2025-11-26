@@ -28,7 +28,7 @@ def generate_tts_time():
 intents = discord.Intents.default()
 # intents.message_content = True
 # intents.members = True
-client = discord.Client(description="cybermind's BG bot", intents=intents)
+client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 
@@ -73,6 +73,8 @@ async def bgtime(interaction):
 async def on_ready():
     # sync command tree with server
     await tree.sync(guild=discord.Object(id=discord_config["GUILDID"]))
+    
+    await client.change_presence(activity=discord.Game("Здравей!"))
 
     print(f"Logged in as {client.user} (ID: {client.user.id})")
     print("------")
