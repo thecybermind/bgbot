@@ -216,3 +216,4 @@ __marimo__/
 .streamlit/secrets.toml
 
 config.py
+*.mp3
