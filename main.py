@@ -1,6 +1,7 @@
 import asyncio
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import discord
 from discord import app_commands
@@ -10,7 +11,7 @@ from config import discord_config
 
 
 def get_time():
-    return datetime.now().strftime("The time in Bulgaria is now %I:%M %p on %b %d, %Y.")
+    return datetime.now(ZoneInfo("Europe/Sofia")).strftime("The time in Bulgaria is now %I:%M %p on %b %d, %Y.")
 
 
 def generate_tts_time():
