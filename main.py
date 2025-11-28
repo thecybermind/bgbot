@@ -91,7 +91,7 @@ async def do_time_cmd(interaction, msg):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtime(interaction):
-    do_time_cmd(interaction, get_time_bg())
+    await do_time_cmd(interaction, get_time_bg())
 
 
 @tree.command(
@@ -100,7 +100,7 @@ async def bgtime(interaction):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtimemd(interaction):
-    do_time_cmd(interaction, get_time_md())
+    await do_time_cmd(interaction, get_time_md())
 
 
 @tree.command(
@@ -109,7 +109,7 @@ async def bgtimemd(interaction):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtimetx(interaction):
-    do_time_cmd(interaction, get_time_tx())
+    await do_time_cmd(interaction, get_time_tx())
 
 
 @client.event
