@@ -28,7 +28,7 @@ def get_time_md():
     )
 
 
-def get_time_texas():
+def get_time_tx():
     return datetime.now(ZoneInfo("America/Chicago")).strftime(
         "The time in Texas is now %I:%M %p on %b %d, %Y."
     )
@@ -84,7 +84,7 @@ async def do_time_cmd(interaction, msg):
             ),
         )
 
-        
+
 @tree.command(
     name="bgtime",
     description="What time is it now in Bulgaria?",
