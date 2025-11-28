@@ -16,13 +16,25 @@ DISCORD_STATUS = discord_config.get("STATUS", "")
 GTTS_FILENAME = discord_config.get("GTTS_FILENAME", "phrase.mp3")
 
 
-def get_time():
+def get_time_bg():
     return datetime.now(ZoneInfo("Europe/Sofia")).strftime(
         "The time in Bulgaria is now %I:%M %p on %b %d, %Y."
     )
 
 
-def generate_tts_time():
+def get_time_md():
+    return datetime.now(ZoneInfo("America/New_York")).strftime(
+        "The time in Maryland is now %I:%M %p on %b %d, %Y."
+    )
+
+
+def get_time_texas():
+    return datetime.now(ZoneInfo("America/Chicago")).strftime(
+        "The time in Texas is now %I:%M %p on %b %d, %Y."
+    )
+
+
+def generate_tts_time(text):
     # delete TTS file if it exists
     try:
         os.remove(GTTS_FILENAME)
@@ -30,7 +42,7 @@ def generate_tts_time():
         pass
 
     # generate TTS
-    speech = gTTS(text=get_time(), lang="en", tld="us", slow=False)
+    speech = gTTS(text=text, lang="en", tld="us", slow=False)
     speech.save(GTTS_FILENAME)
 
 
@@ -41,14 +53,9 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 
-@tree.command(
-    name="bgtime",
-    description="What time is it now in Bulgaria?",
-    guild=discord.Object(id=DISCORD_GUILDID),
-)
-async def bgtime(interaction):
+async def do_time_cmd(interaction, msg):
     # send response to slash command (only to the user, and do not trigger notification)
-    await interaction.response.send_message(get_time(), ephemeral=True, silent=True)
+    await interaction.response.send_message(msg, ephemeral=True, silent=True)
 
     # get active voice connection for this server
     voice = discord.utils.get(client.voice_clients, guild=interaction.guild)
@@ -64,7 +71,7 @@ async def bgtime(interaction):
         await connected.channel.connect()
 
         # get TTS
-        generate_tts_time()
+        generate_tts_time(msg)
 
         # get new voice connection for this server (since we just joined)
         voice = discord.utils.get(client.voice_clients, guild=interaction.guild)
@@ -76,6 +83,33 @@ async def bgtime(interaction):
                 voice.disconnect(), client.loop
             ),
         )
+
+        
+@tree.command(
+    name="bgtime",
+    description="What time is it now in Bulgaria?",
+    guild=discord.Object(id=DISCORD_GUILDID),
+)
+async def bgtime(interaction):
+    do_time_cmd(interaction, get_time_bg())
+
+
+@tree.command(
+    name="bgtimemd",
+    description="What time is it now in Maryland?",
+    guild=discord.Object(id=DISCORD_GUILDID),
+)
+async def bgtimemd(interaction):
+    do_time_cmd(interaction, get_time_md())
+
+
+@tree.command(
+    name="bgtimetx",
+    description="What time is it now in Texas?",
+    guild=discord.Object(id=DISCORD_GUILDID),
+)
+async def bgtimetx(interaction):
+    do_time_cmd(interaction, get_time_tx())
 
 
 @client.event
@@ -89,7 +123,5 @@ async def on_ready():
     print(f"Logged in as {client.user} (ID: {client.user.id})")
     print("------")
 
-
-# generate_tts_time()
 
 client.run(DISCORD_TOKEN)
