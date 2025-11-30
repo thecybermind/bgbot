@@ -28,6 +28,12 @@ def get_time_md():
     )
 
 
+def get_time_nc():
+    return datetime.now(ZoneInfo("America/New_York")).strftime(
+        "The time in North Carolina is now %I:%M %p on %b %d, %Y. Please take your shirt off and swing it 'round your head like a helicopter."
+    )
+
+
 def get_time_tx():
     return datetime.now(ZoneInfo("America/Chicago")).strftime(
         "The time in Texas is now %I:%M %p on %b %d, %Y."
@@ -101,6 +107,15 @@ async def bgtime(interaction):
 )
 async def bgtimemd(interaction):
     await do_time_cmd(interaction, get_time_md())
+
+
+@tree.command(
+    name="bgtimenc",
+    description="What time is it now in North Carolina?",
+    guild=discord.Object(id=DISCORD_GUILDID),
+)
+async def bgtimenc(interaction):
+    await do_time_cmd(interaction, get_time_nc())
 
 
 @tree.command(
