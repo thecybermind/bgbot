@@ -18,25 +18,25 @@ GTTS_FILENAME = discord_config.get("GTTS_FILENAME", "phrase.mp3")
 
 def get_time_bg():
     return datetime.now(ZoneInfo("Europe/Sofia")).strftime(
-        "The time in Bulgaria is now %I:%M %p on %b %d, %Y."
+        "The time in Bulgaria is now %I:%M %p on %b %d."
     )
 
 
 def get_time_md():
     return datetime.now(ZoneInfo("America/New_York")).strftime(
-        "The time in Maryland is now %I:%M %p on %b %d, %Y."
+        "The time in Maryland is now %I:%M %p on %b %d."
     )
 
 
 def get_time_nc():
     return datetime.now(ZoneInfo("America/New_York")).strftime(
-        "The time in North Carolina is now %I:%M %p on %b %d %Y. Please take your shirt off and swing it 'round your head like a helicopter."
+        "The time in North Carolina is now %I:%M %p on %b %d. Please take your shirt off and swing it 'round your head like a helicopter."
     )
 
 
 def get_time_tx():
     return datetime.now(ZoneInfo("America/Chicago")).strftime(
-        "The stars at %I:%M %p on %b %d, %Y are big and bright deep in the heart of Texas."
+        "The stars at %I:%M %p on %b %d are big and bright deep in the heart of Texas."
     )
 
 
