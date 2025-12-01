@@ -30,13 +30,13 @@ def get_time_md():
 
 def get_time_nc():
     return datetime.now(ZoneInfo("America/New_York")).strftime(
-        "The time in North Carolina is now %I:%M %p on %b %d, %Y. Please take your shirt off and swing it 'round your head like a helicopter."
+        "The time in North Carolina is now %I:%M %p on %b %d %Y. Please take your shirt off and swing it 'round your head like a helicopter."
     )
 
 
 def get_time_tx():
     return datetime.now(ZoneInfo("America/Chicago")).strftime(
-        "The time in Texas is now %I:%M %p on %b %d, %Y."
+        "The stars at %I:%M %p on %b %d, %Y are big and bright deep in the heart of Texas."
     )
 
 
