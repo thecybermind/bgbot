@@ -1,5 +1,6 @@
 import asyncio
 import os
+import random
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -36,8 +37,14 @@ def get_time_nc():
 
 def get_time_tx():
     return datetime.now(ZoneInfo("America/Chicago")).strftime(
-        "The stars at %I:%M %p on %b %d are big and bright deep in the heart of Texas."
+        "The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas."
     )
+
+
+def get_art_bp():
+    systolic = random.randint(95, 145)
+    diastolic = random.randint(65, 100)
+    return f"Art's blood pressure is currently {systolic} over {diastolic}."
 
 
 def generate_tts_time(text):
@@ -127,6 +134,15 @@ async def bgtimetx(interaction):
     await do_time_cmd(interaction, get_time_tx())
 
 
+@tree.command(
+    name="artbp",
+    description="What is Art's current BP?",
+    guild=discord.Object(id=DISCORD_GUILDID),
+)
+async def artbp(interaction):
+    await do_time_cmd(interaction, get_art_bp())
+
+
 @client.event
 async def on_ready():
     # sync command tree with server
@@ -134,6 +150,9 @@ async def on_ready():
 
     # update presence (line of text underneath name in user list)
     await client.change_presence(activity=discord.Game(DISCORD_STATUS))
+
+    # seed prng
+    random.seed()
 
     print(f"Logged in as {client.user} (ID: {client.user.id})")
     print("------")
