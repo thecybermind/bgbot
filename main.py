@@ -41,6 +41,12 @@ def get_time_tx():
     )
 
 
+def get_time_wake():
+    return datetime.now(ZoneInfo("Pacific/Wake")).strftime(
+        "The time on Wake Island is now %I:%M %p on %b %d."
+    )
+
+
 def get_art_bp():
     systolic = random.randint(95, 145)
     diastolic = random.randint(65, 100)
@@ -132,6 +138,15 @@ async def bgtimenc(interaction):
 )
 async def bgtimetx(interaction):
     await do_time_cmd(interaction, get_time_tx())
+
+
+@tree.command(
+    name="bgtimewake",
+    description="What time is it now on Wake Island?",
+    guild=discord.Object(id=DISCORD_GUILDID),
+)
+async def bgtimewake(interaction):
+    await do_time_cmd(interaction, get_time_wake())
 
 
 @tree.command(
