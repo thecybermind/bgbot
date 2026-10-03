@@ -40,6 +40,11 @@ def get_time_tx():
         "The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas."
     )
 
+def get_time_nm():
+    return datetime.now(ZoneInfo("America/Boise")).strftime(
+        "The aliens probed my anus at %I:%M %p on %b %d in New Mexico."
+    )
+
 
 def get_art_bp():
     systolic = random.randint(95, 145)
@@ -132,6 +137,15 @@ async def bgtimenc(interaction):
 )
 async def bgtimetx(interaction):
     await do_time_cmd(interaction, get_time_tx())
+
+
+@tree.command(
+    name="bgtimenm",
+    description="What time is it now in New Mexico?",
+    guild=discord.Object(id=DISCORD_GUILDID),
+)
+async def bgtimenm(interaction):
+    await do_time_cmd(interaction, get_time_nm())
 
 
 @tree.command(
