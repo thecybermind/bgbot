@@ -39,54 +39,42 @@ def get_time_bg_bg():
         "декември",
     ]
     now = datetime.now(ZoneInfo("Europe/Sofia"))
-    msg = now.strftime(f"В момента в България е %H:%M на %d {months[now.month]}.")
-    speechmsg = msg
-    return msg, speechmsg
+    return now.strftime(f"В момента в България е %H:%M на %d {months[now.month]}.")
 
 
 def get_time_md():
     now = datetime.now(ZoneInfo("America/New_York"))
-    msg = now.strftime("Another pony was struck on Assateague at %I:%M %p on %b %d.")
-    speechmsg = now.strftime(
-        "Another pony was struck on Ass-uh-teeg at %I:%M %p on %b %d."
-    )
-    return msg, speechmsg
+    timestr = now.strftime("%I:%M %p on %b %d")
+    msg = f"Another pony was struck on Assateague at {timestr}."
+    smsg = f"Another pony was struck on Ass-uh-teeg at {timestr}."
+    return msg, smsg
 
 
 def get_time_nc():
     now = datetime.now(ZoneInfo("America/New_York"))
-    msg = now.strftime(
+    return now.strftime(
         "The time in North Carolina is now %I:%M %p on %b %d. "
         "Please take your shirt off and swing it round your head like a helicopter."
     )
-    speechmsg = msg
-    return msg, speechmsg
 
 
 def get_time_tx():
     now = datetime.now(ZoneInfo("America/Chicago"))
-    msg = now.strftime(
-        "The stars at %I:%M %p on %b %d are big and bright, deep in the heart of Texas."
-    )
-    speechmsg = now.strftime(
-        "The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas."
-    )
-    return msg, speechmsg
+    timestr = now.strftime("%I:%M %p on %b %d")
+    msg = f"The stars at {timestr} are big and bright, deep in the heart of Texas."
+    smsg = f"The stars at {timestr} are big and bright. . Deep in the heart of Texas."
+    return msg, smsg
 
 
 def get_time_nm():
     now = datetime.now(ZoneInfo("America/Boise"))
-    msg = now.strftime("The aliens probed my anus at %I:%M %p on %b %d in New Mexico.")
-    speechmsg = msg
-    return msg, speechmsg
+    return now.strftime("The aliens probed my anus at %I:%M %p on %b %d in New Mexico.")
 
 
 def get_art_bp():
     systolic = random.randint(95, 145)
     diastolic = random.randint(65, 100)
-    msg = f"Art's blood pressure is currently {systolic} over {diastolic}."
-    speechmsg = msg
-    return msg, speechmsg
+    return f"Art's blood pressure is currently {systolic} over {diastolic}."
 
 
 def generate_tts_time(text, lang="en", tld="us"):
@@ -114,8 +102,10 @@ tree = app_commands.CommandTree(client)
 async def do_time_cmd(interaction, msgs, lang="en", tld="us"):
     if not msgs:
         return
+    # if msgs is a tuple or list, split them out into msg and speechmsg
     if type(msgs) in [list, tuple]:
         msg, speechmsg = msgs
+    # otherwise, it's just 1 message to use for both
     else:
         msg = msgs
         speechmsg = msgs
