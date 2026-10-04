@@ -19,13 +19,13 @@ GTTS_FILENAME = discord_config.get("GTTS_FILENAME", "phrase.mp3")
 
 def get_time_bg():
     return datetime.now(ZoneInfo("Europe/Sofia")).strftime(
-        "The time in Bulgaria is now %I:%M %p on %b %d."
+        "В момента в България е %H:%M %p на %d %b."
     )
 
 
 def get_time_md():
     return datetime.now(ZoneInfo("America/New_York")).strftime(
-        "The time in Maryland is now %I:%M %p on %b %d."
+        "Another pony was struck on Assateague at %I:%M %p on %b %d."
     )
 
 
@@ -52,7 +52,7 @@ def get_art_bp():
     return f"Art's blood pressure is currently {systolic} over {diastolic}."
 
 
-def generate_tts_time(text):
+def generate_tts_time(text, lang="en", tld="us"):
     # delete TTS file if it exists
     try:
         os.remove(GTTS_FILENAME)
@@ -60,7 +60,7 @@ def generate_tts_time(text):
         pass
 
     # generate TTS
-    speech = gTTS(text=text, lang="en", tld="us", slow=False)
+    speech = gTTS(text=text, lang=lang, tld=tld, slow=False)
     speech.save(GTTS_FILENAME)
 
 
@@ -71,7 +71,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 
-async def do_time_cmd(interaction, msg):
+async def do_time_cmd(interaction, msg, lang="en", tld="us"):
     # send response to slash command (only to the user, and do not trigger notification)
     await interaction.response.send_message(msg, ephemeral=True, silent=True)
 
@@ -89,7 +89,7 @@ async def do_time_cmd(interaction, msg):
         await connected.channel.connect()
 
         # get TTS
-        generate_tts_time(msg)
+        generate_tts_time(msg, lang, tld)
 
         # get new voice connection for this server (since we just joined)
         voice = discord.utils.get(client.voice_clients, guild=interaction.guild)
@@ -109,7 +109,7 @@ async def do_time_cmd(interaction, msg):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtime(interaction):
-    await do_time_cmd(interaction, get_time_bg())
+    await do_time_cmd(interaction, get_time_bg(), "bg", "bg")
 
 
 @tree.command(
