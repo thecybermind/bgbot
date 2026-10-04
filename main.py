@@ -19,14 +19,37 @@ GTTS_FILENAME = discord_config.get("GTTS_FILENAME", "phrase.mp3")
 
 def get_time_bg():
     return datetime.now(ZoneInfo("Europe/Sofia")).strftime(
-        "В момента в България е %H:%M %p на %d %b."
+        "The time in Bulgaria is now %I:%M %p on %b %d."
     )
 
 
-def get_time_md():
-    return datetime.now(ZoneInfo("America/New_York")).strftime(
-        "Another pony was struck on Assateague at %I:%M %p on %b %d."
-    )
+def get_time_bg_bg():
+    months = [
+        "месец",
+        "януари",
+        "февруари",
+        "март",
+        "април",
+        "май",
+        "юни",
+        "юли",
+        "август",
+        "септември",
+        "октомври",
+        "ноември",
+        "декември",
+    ]
+    now = datetime.now(ZoneInfo("Europe/Sofia"))
+    return now.strftime(f"В момента в България е %H:%M %p на %d {months[now.month]}.")
+
+
+def get_time_md(speech=False):
+    now = datetime.now(ZoneInfo("America/New_York"))
+    if speech:
+        return now.strftime(
+            "Another pony was struck on Assa-teeg at %I:%M %p on %b %d."
+        )
+    return now.strftime("Another pony was struck on Assateague at %I:%M %p on %b %d.")
 
 
 def get_time_nc():
@@ -35,10 +58,16 @@ def get_time_nc():
     )
 
 
-def get_time_tx():
-    return datetime.now(ZoneInfo("America/Chicago")).strftime(
-        "The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas."
+def get_time_tx(speech=False):
+    now = datetime.now(ZoneInfo("America/Chicago"))
+    if speech:
+        return now.strftime(
+            "The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas."
+        )
+    return now.strftime(
+        "The stars at %I:%M %p on %b %d are big and bright, deep in the heart of Texas."
     )
+
 
 def get_time_nm():
     return datetime.now(ZoneInfo("America/Boise")).strftime(
@@ -71,7 +100,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 
-async def do_time_cmd(interaction, msg, lang="en", tld="us"):
+async def do_time_cmd(interaction, msg, speechmsg=None, lang="en", tld="us"):
     # send response to slash command (only to the user, and do not trigger notification)
     await interaction.response.send_message(msg, ephemeral=True, silent=True)
 
@@ -87,9 +116,12 @@ async def do_time_cmd(interaction, msg, lang="en", tld="us"):
     if connected:
         # join the channel
         await connected.channel.connect()
-
+        
+        if speechmsg is None:
+            speechmsg = msg
+            
         # get TTS
-        generate_tts_time(msg, lang, tld)
+        generate_tts_time(speechmsg, lang, tld)
 
         # get new voice connection for this server (since we just joined)
         voice = discord.utils.get(client.voice_clients, guild=interaction.guild)
@@ -109,6 +141,15 @@ async def do_time_cmd(interaction, msg, lang="en", tld="us"):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtime(interaction):
+    await do_time_cmd(interaction, get_time_bg())
+
+
+@tree.command(
+    name="bgtimebg",
+    description="Колко е часът в България в момента?",
+    guild=discord.Object(id=DISCORD_GUILDID),
+)
+async def bgtimebg(interaction):
     await do_time_cmd(interaction, get_time_bg(), "bg", "bg")
 
 
@@ -118,7 +159,7 @@ async def bgtime(interaction):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtimemd(interaction):
-    await do_time_cmd(interaction, get_time_md())
+    await do_time_cmd(interaction, get_time_md(), speech=get_time_md(speech=True))
 
 
 @tree.command(
@@ -136,7 +177,7 @@ async def bgtimenc(interaction):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtimetx(interaction):
-    await do_time_cmd(interaction, get_time_tx())
+    await do_time_cmd(interaction, get_time_tx(), speech=get_time_tx(speech=True))
 
 
 @tree.command(
