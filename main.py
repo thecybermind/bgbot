@@ -18,9 +18,8 @@ GTTS_FILENAME = discord_config.get("GTTS_FILENAME", "phrase.mp3")
 
 
 def get_time_bg():
-    return datetime.now(ZoneInfo("Europe/Sofia")).strftime(
-        "The time in Bulgaria is now %I:%M %p on %b %d."
-    )
+    now = datetime.now(ZoneInfo("Europe/Sofia"))
+    return now.strftime("The time in Bulgaria is now %I:%M %p on %b %d.")
 
 
 def get_time_bg_bg():
@@ -40,45 +39,50 @@ def get_time_bg_bg():
         "декември",
     ]
     now = datetime.now(ZoneInfo("Europe/Sofia"))
-    return now.strftime(f"В момента в България е %H:%M %p на %d {months[now.month]}.")
+    msg = now.strftime(f"В момента в България е %H:%M %p на %d {months[now.month]}.")
+    speechmsg = msg
+    return msg, speechmsg
 
 
-def get_time_md(speech=False):
+def get_time_md():
     now = datetime.now(ZoneInfo("America/New_York"))
-    if speech:
-        return now.strftime(
-            "Another pony was struck on Assa-teeg at %I:%M %p on %b %d."
-        )
-    return now.strftime("Another pony was struck on Assateague at %I:%M %p on %b %d.")
+    msg = now.strftime("Another pony was struck on Assateague at %I:%M %p on %b %d.")
+    speechmsg = now.strftime("Another pony was struck on Ass-uh-teeg at %I:%M %p on %b %d.")
+    return msg, speechmsg
+    
+    
 
 
 def get_time_nc():
-    return datetime.now(ZoneInfo("America/New_York")).strftime(
-        "The time in North Carolina is now %I:%M %p on %b %d. Please take your shirt off and swing it 'round your head like a helicopter."
+    now = datetime.now(ZoneInfo("America/New_York"))
+    msg = now.strftime(
+        "The time in North Carolina is now %I:%M %p on %b %d."
+        "Please take your shirt off and swing it 'round your head like a helicopter."
     )
+    speechmsg = msg
+    return msg, speechmsg
 
 
-def get_time_tx(speech=False):
+def get_time_tx():
     now = datetime.now(ZoneInfo("America/Chicago"))
-    if speech:
-        return now.strftime(
-            "The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas."
-        )
-    return now.strftime(
-        "The stars at %I:%M %p on %b %d are big and bright, deep in the heart of Texas."
-    )
+    msg = now.strftime("The stars at %I:%M %p on %b %d are big and bright, deep in the heart of Texas.")
+    speechmsg = now.strftime("The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas.")
+    return msg, speechmsg
 
 
 def get_time_nm():
-    return datetime.now(ZoneInfo("America/Boise")).strftime(
-        "The aliens probed my anus at %I:%M %p on %b %d in New Mexico."
-    )
+    now = datetime.now(ZoneInfo("America/Boise"))
+    msg = now.strftime("The aliens probed my anus at %I:%M %p on %b %d in New Mexico.")
+    speechmsg = msg
+    return msg, speechmsg
 
 
 def get_art_bp():
     systolic = random.randint(95, 145)
     diastolic = random.randint(65, 100)
-    return f"Art's blood pressure is currently {systolic} over {diastolic}."
+    msg = f"Art's blood pressure is currently {systolic} over {diastolic}."
+    speechmsg = msg
+    return msg, speechmsg
 
 
 def generate_tts_time(text, lang="en", tld="us"):
@@ -100,7 +104,15 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 
-async def do_time_cmd(interaction, msg, speechmsg=None, lang="en", tld="us"):
+async def do_time_cmd(interaction, msgs, lang="en", tld="us"):
+    if not msgs:
+        return
+    if type(msgs) in [list,tuple]:
+        msg, speechmsg = msgs
+    else
+        msg = msgs
+        speechmsg = msgs
+
     # send response to slash command (only to the user, and do not trigger notification)
     await interaction.response.send_message(msg, ephemeral=True, silent=True)
 
@@ -117,9 +129,6 @@ async def do_time_cmd(interaction, msg, speechmsg=None, lang="en", tld="us"):
         # join the channel
         await connected.channel.connect()
         
-        if speechmsg is None:
-            speechmsg = msg
-            
         # get TTS
         generate_tts_time(speechmsg, lang, tld)
 
@@ -159,7 +168,7 @@ async def bgtimebg(interaction):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtimemd(interaction):
-    await do_time_cmd(interaction, get_time_md(), speechmsg=get_time_md(speech=True))
+    await do_time_cmd(interaction, get_time_md())
 
 
 @tree.command(
@@ -177,7 +186,7 @@ async def bgtimenc(interaction):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtimetx(interaction):
-    await do_time_cmd(interaction, get_time_tx(), speechmsg=get_time_tx(speech=True))
+    await do_time_cmd(interaction, get_time_tx())
 
 
 @tree.command(
