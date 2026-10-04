@@ -109,7 +109,7 @@ async def do_time_cmd(interaction, msgs, lang="en", tld="us"):
         return
     if type(msgs) in [list,tuple]:
         msg, speechmsg = msgs
-    else
+    else:
         msg = msgs
         speechmsg = msgs
 
