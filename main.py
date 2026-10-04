@@ -150,7 +150,7 @@ async def bgtime(interaction):
     guild=discord.Object(id=DISCORD_GUILDID),
 )
 async def bgtimebg(interaction):
-    await do_time_cmd(interaction, get_time_bg(), "bg", "bg")
+    await do_time_cmd(interaction, get_time_bg_bg(), "bg", "bg")
 
 
 @tree.command(
