@@ -47,17 +47,17 @@ def get_time_bg_bg():
 def get_time_md():
     now = datetime.now(ZoneInfo("America/New_York"))
     msg = now.strftime("Another pony was struck on Assateague at %I:%M %p on %b %d.")
-    speechmsg = now.strftime("Another pony was struck on Ass-uh-teeg at %I:%M %p on %b %d.")
+    speechmsg = now.strftime(
+        "Another pony was struck on Ass-uh-teeg at %I:%M %p on %b %d."
+    )
     return msg, speechmsg
-    
-    
 
 
 def get_time_nc():
     now = datetime.now(ZoneInfo("America/New_York"))
     msg = now.strftime(
-        "The time in North Carolina is now %I:%M %p on %b %d."
-        "Please take your shirt off and swing it 'round your head like a helicopter."
+        "The time in North Carolina is now %I:%M %p on %b %d. "
+        "Please take your shirt off and swing it round your head like a helicopter."
     )
     speechmsg = msg
     return msg, speechmsg
@@ -65,8 +65,12 @@ def get_time_nc():
 
 def get_time_tx():
     now = datetime.now(ZoneInfo("America/Chicago"))
-    msg = now.strftime("The stars at %I:%M %p on %b %d are big and bright, deep in the heart of Texas.")
-    speechmsg = now.strftime("The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas.")
+    msg = now.strftime(
+        "The stars at %I:%M %p on %b %d are big and bright, deep in the heart of Texas."
+    )
+    speechmsg = now.strftime(
+        "The stars at %I:%M %p on %b %d are big and bright. . Deep in the heart of Texas."
+    )
     return msg, speechmsg
 
 
@@ -92,8 +96,11 @@ def generate_tts_time(text, lang="en", tld="us"):
     except:  # pylint: disable=bare-except
         pass
 
+    slow = False
+    if lang == "bg":
+        slow = True
     # generate TTS
-    speech = gTTS(text=text, lang=lang, tld=tld, slow=False)
+    speech = gTTS(text=text, lang=lang, tld=tld, slow=slow)
     speech.save(GTTS_FILENAME)
 
 
@@ -107,7 +114,7 @@ tree = app_commands.CommandTree(client)
 async def do_time_cmd(interaction, msgs, lang="en", tld="us"):
     if not msgs:
         return
-    if type(msgs) in [list,tuple]:
+    if type(msgs) in [list, tuple]:
         msg, speechmsg = msgs
     else:
         msg = msgs
@@ -128,7 +135,7 @@ async def do_time_cmd(interaction, msgs, lang="en", tld="us"):
     if connected:
         # join the channel
         await connected.channel.connect()
-        
+
         # get TTS
         generate_tts_time(speechmsg, lang, tld)
 
