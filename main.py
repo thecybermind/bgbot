@@ -39,7 +39,7 @@ def get_time_bg_bg():
         "декември",
     ]
     now = datetime.now(ZoneInfo("Europe/Sofia"))
-    msg = now.strftime(f"В момента в България е %H:%M %p на %d {months[now.month]}.")
+    msg = now.strftime(f"В момента в България е %H:%M на %d {months[now.month]}.")
     speechmsg = msg
     return msg, speechmsg
 
