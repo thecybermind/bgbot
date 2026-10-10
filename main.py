@@ -39,7 +39,15 @@ def get_time_bg_bg():
         "декември",
     ]
     now = datetime.now(ZoneInfo("Europe/Sofia"))
-    return now.strftime(f"В момента в България е %H:%M на %d {months[now.month]}.")
+    msg = now.strftime(f"В момента в България е %H:%M на %d {months[now.month]}.")
+    hour = now.strftime("%H")
+    if (hour[0] == '0')
+        hour = hour[1]
+    day = now.strftime("%d")
+    if (day[0] == '0')
+        day = day[1]
+    smsg = now.strftime(f"В момента в България е {hour}:%M на {day} {months[now.month]}.")
+    return msg, smsg
 
 
 def get_time_md():
