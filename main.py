@@ -46,7 +46,7 @@ def get_time_bg_bg():
     day = now.strftime("%d")
     if (day[0] == '0'):
         day = day[1]
-    smsg = now.strftime(f"В момента в България е {hour}:%M на {day} {months[now.month]}.")
+    smsg = now.strftime(f"В момента в България е {hour}:%M часа на {day} {months[now.month]}.")
     return msg, smsg
 
 
